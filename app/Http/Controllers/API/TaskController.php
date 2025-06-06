@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\Task;
 
 class TaskController extends Controller
@@ -42,8 +43,43 @@ class TaskController extends Controller
             ]
         );
 
-        // $task = $request->user()->tasks()->create($validated);
-
         return response()->json($task, 201);
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['pendente', 'em andamento', 'concluída'])],
+        ]);
+        $id = $request->user()->id;
+        $task = $request->user()->tasks()->find($id);
+
+        if (!$task) {
+            return response()->json(['message' => 'Tarefa não encontrada'], 404);
+        }
+        if ($task->status === $validated['status']) {
+            return response()->json(['message' => 'A tarefa já está com o status ' . $validated['status']], 200);
+        }
+        $task->update(
+            [
+                'status' => $validated['status'],
+            ]
+        );
+
+        return response()->json($task, 200);
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        
+        $task = $request->user()->tasks()->find($id);
+
+        if (!$task) {
+            return response()->json(['message' => 'Tarefa não encontrada'], 404);
+        }
+
+        $task->delete();
+
+        return response()->json(['message' => 'Tarefa deletada com sucesso'], 200);
     }
 }

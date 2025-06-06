@@ -4,12 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\TaskController,App\Http\Controllers\API\AuthController;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/tasks', [TaskController::class, 'index']);
-    Route::post('/tasks/store',  [TaskController::class, 'store']);
+Route::prefix('tasks')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [TaskController::class, 'index']);
+    Route::post('/store',  [TaskController::class, 'store']);
     //Route::get('/tasks/{task}', [TaskController::class, 'updateStatus']);
-    Route::put('/tasks/{id}/status', [TaskController::class, 'updateStatus']);
-    Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
+    Route::put('/status', [TaskController::class, 'updateStatus']);
+    Route::delete('/delete/{id}', [TaskController::class, 'destroy']);
 });
 
 // Authentication routes
