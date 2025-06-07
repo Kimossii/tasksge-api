@@ -94,7 +94,7 @@ Response 201:
 
 #### Listar todas as tarefas do usuário
 * GET /api/tasks/list — Listar 
-#### Filtrar por status
+#### Filtrar por status -
 * GET /api/tasks/filter/{status} 
 ##### Filtrar por estatos: pendente; em andamento e conluída 
 #### Atualizar status

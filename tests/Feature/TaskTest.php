@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('usuário pode criar uma tarefa', function () {
-    // Criar um usuário de teste
+    // Criar um usuário de teste de forma autenticada
     $user = User::factory()->create();
 
     // Dados da tarefa a ser criada

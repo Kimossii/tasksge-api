@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\TaskController,App\Http\Controllers\API\AuthController;
 
-//Rotas das tarefas
+//Rotas das tarefas//Tasks
 Route::prefix('tasks')->middleware('auth:sanctum')->group(function () {
     Route::get('/list', [TaskController::class, 'list']);
     Route::get('/filter/{status}', [TaskController::class, 'filter']);
