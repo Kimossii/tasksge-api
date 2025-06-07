@@ -10,22 +10,28 @@ use App\Models\Task;
 class TaskController extends Controller
 {
     //
-    function show()
+    function list()
     {
-        return response()->json(['message' => 'Hello, World!'], 200);
-    }
-    public function index(Request $request)
-    {
-        $status = $request->query('status');
-
-        $query = $request->user()->tasks();
-
-        if ($status) {
-            $query->where('status', $status);
+        $userId = request()->user()->id;
+        $tasks = Task::where('user_id', $userId)->get();
+        if ($tasks->isEmpty()) {
+            return response()->json(['message' => 'Nenhuma tarefa encontrada'], 404);
         }
-
-        return response()->json($query->get(), 200);
+        return response()->json([$tasks], 200);
     }
+
+    public function filter($status)
+    {
+        $userId = request()->user()->id;
+        $tasks = Task::where('user_id', $userId)
+                         ->where('status', strtolower($status))
+                         ->get();
+        if ($tasks->isEmpty()) {
+            return response()->json(['message' => 'Nenhuma tarefa encontrada com o status ' . $status], 404);
+        }
+        return response()->json($tasks, 200);
+    }
+
 
     public function store(Request $request)
     {
@@ -33,45 +39,49 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
-        $id = $request->user()->id;
 
         $task = Task::create(
             [
                 'title' => $validated['title'],
                 'description' => $validated['description'],
-                'user_id' => $id,
+                'user_id' => $request->user()->id,
             ]
         );
 
-        return response()->json($task, 201);
+        return response()->json(['data' => $task], 201);
     }
 
-    public function updateStatus(Request $request)
+
+
+    public function updateStatus(Request $request, $id)
     {
         $validated = $request->validate([
             'status' => ['required', Rule::in(['pendente', 'em andamento', 'concluída'])],
         ]);
-        $id = $request->user()->id;
+
         $task = $request->user()->tasks()->find($id);
 
         if (!$task) {
             return response()->json(['message' => 'Tarefa não encontrada'], 404);
         }
+
         if ($task->status === $validated['status']) {
-            return response()->json(['message' => 'A tarefa já está com o status ' . $validated['status']], 200);
+            return response()->json([
+                'message' => 'A tarefa já está com o status "' . $validated['status'] . '".'
+            ], 200);
         }
-        $task->update(
-            [
-                'status' => $validated['status'],
-            ]
-        );
+
+        $task->update([
+            'status' => $validated['status'],
+        ]);
 
         return response()->json($task, 200);
     }
 
+
     public function destroy(Request $request, $id)
     {
-        
+
         $task = $request->user()->tasks()->find($id);
 
         if (!$task) {
@@ -80,6 +90,9 @@ class TaskController extends Controller
 
         $task->delete();
 
-        return response()->json(['message' => 'Tarefa deletada com sucesso'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Tarefa deletada com sucesso',
+        ], 200);
     }
 }

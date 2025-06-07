@@ -4,10 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\TaskController,App\Http\Controllers\API\AuthController;
 
+//Rotas das tarefas
 Route::prefix('tasks')->middleware('auth:sanctum')->group(function () {
-    Route::get('/', [TaskController::class, 'index']);
+    Route::get('/list', [TaskController::class, 'list']);
+    Route::get('/filter/{status}', [TaskController::class, 'filter']);
     Route::post('/store',  [TaskController::class, 'store']);
-    //Route::get('/tasks/{task}', [TaskController::class, 'updateStatus']);
     Route::put('/status', [TaskController::class, 'updateStatus']);
     Route::delete('/delete/{id}', [TaskController::class, 'destroy']);
 });
