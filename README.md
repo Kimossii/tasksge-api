@@ -125,3 +125,13 @@ php artisan test
 * Atualizar status
 
 * Deletar tarefa
+
+## 📘 Documentação Swagger 
+#### Você pode visualizar a documentação completa da API em formato Swagger.
+* http://127.0.0.1:8000/api/documentation/
+
+## 📞 Contatos
+
+- **Email:** eluckimossi@gmail.com  
+- **LinkedIn:** [Eluki Júnior](https://www.linkedin.com/in/eluki-baptista/)  
+- **GitHub:** [Eluki Júnior](https://github.com/Kimossii)  

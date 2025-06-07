@@ -6,9 +6,37 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Task;
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\Info(
+ *     title="API de Gerenciamento de Tarefas",
+ *     version="1.0.0",
+ *     description="API RESTful para criar, listar, atualizar e deletar tarefas dos usuários"
+ * )
+ *
+ * @OA\Server(
+ *     url="http://localhost:8000/api",
+ *     description="Servidor Local"
+ * )
+ */
 
 class TaskController extends Controller
 {
+    //Aqui anotações Swagger
+
+    /**
+     * @OA\Get(
+     *     path="/tasks/list",
+     *     tags={"Tarefas"},
+     *     summary="Listar todas as tarefas do usuário autenticado",
+     *     security={{"sanctum": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de tarefas"
+     *     )
+     * )
+     */
     //
     function list()
     {
@@ -20,19 +48,60 @@ class TaskController extends Controller
         return response()->json([$tasks], 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/tasks/filter/{status}",
+     *     tags={"Tarefas"},
+     *     summary="Filtrar tarefas por status",
+     *     security={{"sanctum": {}}},
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="string", enum={"pendente", "em andamento", "concluída"})
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de tarefas filtradas"
+     *     )
+     * )
+     */
     public function filter($status)
     {
         $userId = request()->user()->id;
         $tasks = Task::where('user_id', $userId)
-                         ->where('status', strtolower($status))
-                         ->get();
+            ->where('status', strtolower($status))
+            ->get();
         if ($tasks->isEmpty()) {
             return response()->json(['message' => 'Nenhuma tarefa encontrada com o status ' . $status], 404);
         }
         return response()->json($tasks, 200);
     }
 
-
+    /**
+     * @OA\Post(
+     *     path="/tasks/store",
+     *     tags={"Tarefas"},
+     *     summary="Criar uma nova tarefa",
+     *     security={{"sanctum": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"titulo"},
+     *             @OA\Property(property="titulo", type="string", example="Estudar Swagger"),
+     *             @OA\Property(property="descricao", type="string", example="Aprender a documentar APIs")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Tarefa criada com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Erro de validação"
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -52,7 +121,35 @@ class TaskController extends Controller
     }
 
 
-
+    /**
+     * @OA\Put(
+     *     path="/tasks/status/{id}",
+     *     tags={"Tarefas"},
+     *     summary="Atualizar o status de uma tarefa",
+     *     security={{"sanctum": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"status"},
+     *             @OA\Property(property="status", type="string", enum={"pendente", "em andamento", "concluída"}, example="concluída")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Status atualizado"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tarefa não encontrada"
+     *     )
+     * )
+     */
     public function updateStatus(Request $request, $id)
     {
         $validated = $request->validate([
@@ -78,7 +175,28 @@ class TaskController extends Controller
         return response()->json($task, 200);
     }
 
-
+    /**
+     * @OA\Delete(
+     *     path="/tasks/delete/{id}",
+     *     tags={"Tarefas"},
+     *     summary="Deletar uma tarefa",
+     *     security={{"sanctum": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Tarefa deletada com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Tarefa não encontrada"
+     *     )
+     * )
+     */
     public function destroy(Request $request, $id)
     {
 
@@ -96,3 +214,4 @@ class TaskController extends Controller
         ], 200);
     }
 }
+
