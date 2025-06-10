@@ -2,17 +2,18 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\TaskController,App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\TaskController, App\Http\Controllers\API\AuthController;
 
-//Rotas das tarefas//Tasks
-Route::prefix('tasks')->middleware('auth:sanctum')->group(function () {
-    Route::get('/list', [TaskController::class, 'list']);
-    Route::get('/filter/{status}', [TaskController::class, 'filter']);
-    Route::post('/store',  [TaskController::class, 'store']);
-    Route::put('/status/{id}', [TaskController::class, 'updateStatus']);
-    Route::delete('/delete/{id}', [TaskController::class, 'destroy']);
+Route::prefix('v1')->group(function () {
+    Route::prefix('tasks')->middleware('auth:sanctum')->group(function () {
+        Route::get('/', [TaskController::class, 'index']);
+        Route::post('/', [TaskController::class, 'store']);
+        Route::put('/status/{id}', [TaskController::class, 'updateStatus']);
+        Route::delete('/{id}', [TaskController::class, 'destroy']);
+        
+        Route::get('/filter/{status}', [TaskController::class, 'filter']);
+    });
 });
-
 // Authentication routes
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);

@@ -10,7 +10,6 @@ Uma API RESTful construída em Laravel para gerenciamento de tarefas com autenti
 - Composer
 - MySQL ou SQLite
 - Laravel >= 12.x
-- Node.js (opcional, apenas se usar frontend)
 - [Postman](https://www.postman.com/) ou `curl` para testar
 
 --- 
@@ -24,6 +23,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 ```
+##### NB: Alterar os dados das tuas credencias da Banco de Dodos com base as configuranções da tua máquina.
 ---
 ## 🛠️ Rodar migrations 
 * No terminarl aonde tiver locazido o projecto
@@ -72,7 +72,7 @@ POST /api/auth/login
 ### 📘 Endpoints de Tarefas
 
 #### Criar Tarefa
-* POST /api/tasks/store 
+* POST /api/v1/tasks/ 
 ```bash
 {
   "title": "Tarefa exemplo",
@@ -93,12 +93,12 @@ Response 201:
 ```
 
 #### Listar todas as tarefas do usuário
-* GET /api/tasks/list — Listar 
+* GET /api/v1/tasks/ — Listar 
 #### Filtrar por status -
-* GET /api/tasks/filter/{status} 
+* GET /api/v1/tasks/filter/{status} 
 ##### Filtrar por estatos: pendente; em andamento e conluída 
 #### Atualizar status
-PUT /api/tasks/status/{status}
+PUT /api/v1/tasks/status/{status}
 ```bash
 {
   "status": "concluída"
@@ -107,7 +107,7 @@ PUT /api/tasks/status/{status}
 ##### Os estatos são: pendente; em andamento e conluída
 
 #### Deletar tarefa
-DELETE /api/tasks/delete/{id} 
+DELETE /api/v1/tasks/{id} 
 
 ## ✅ Rodar testes
 ```bash

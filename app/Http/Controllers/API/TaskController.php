@@ -8,49 +8,50 @@ use Illuminate\Validation\Rule;
 use App\Models\Task;
 use OpenApi\Annotations as OA;
 
-/**
- * @OA\Info(
- *     title="API de Gerenciamento de Tarefas",
- *     version="1.0.0",
- *     description="API RESTful para criar, listar, atualizar e deletar tarefas dos usuários"
- * )
- *
- * @OA\Server(
- *     url="http://localhost:8000/api",
- *     description="Servidor Local"
- * )
- */
+
 
 class TaskController extends Controller
 {
     //Aqui anotações Swagger
 
-    /**
-     * @OA\Get(
-     *     path="/tasks/list",
-     *     tags={"Tarefas"},
-     *     summary="Listar todas as tarefas do usuário autenticado",
-     *     security={{"sanctum": {}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Lista de tarefas"
-     *     )
-     * )
-     */
-    //
-    function list()
-    {
-        $userId = request()->user()->id;
-        $tasks = Task::where('user_id', $userId)->get();
-        if ($tasks->isEmpty()) {
-            return response()->json(['message' => 'Nenhuma tarefa encontrada'], 404);
-        }
-        return response()->json([$tasks], 200);
-    }
 
     /**
      * @OA\Get(
-     *     path="/tasks/filter/{status}",
+     *     path="/v1/tasks/",
+     *     summary="Lista todas as tarefas do usuário autenticado",
+     *     tags={"Tarefas"},
+     *     security={{"sanctum": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de tarefas",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Task"))
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Nenhuma tarefa encontrada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Nenhuma tarefa encontrada")
+     *         )
+     *     )
+     * )
+     */
+
+    public function index()
+    {
+        $userId = request()->user()->id;
+        $tasks = Task::where('user_id', $userId)->get();
+
+        if ($tasks->isEmpty()) {
+            return response()->json(['message' => 'Nenhuma tarefa encontrada'], 404);
+        }
+
+        return response()->json($tasks, 200);
+    }
+
+
+    /**
+     * @OA\Get(
+     *     path="/v1/tasks/filter/{status}",
      *     tags={"Tarefas"},
      *     summary="Filtrar tarefas por status",
      *     security={{"sanctum": {}}},
@@ -80,7 +81,7 @@ class TaskController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/tasks/store",
+     *     path="/v1/tasks/",
      *     tags={"Tarefas"},
      *     summary="Criar uma nova tarefa",
      *     security={{"sanctum": {}}},
@@ -123,7 +124,7 @@ class TaskController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/tasks/status/{id}",
+     *     path="/v1/tasks/status/{id}",
      *     tags={"Tarefas"},
      *     summary="Atualizar o status de uma tarefa",
      *     security={{"sanctum": {}}},
@@ -177,7 +178,7 @@ class TaskController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/tasks/delete/{id}",
+     *     path="/v1/tasks/{id}",
      *     tags={"Tarefas"},
      *     summary="Deletar uma tarefa",
      *     security={{"sanctum": {}}},

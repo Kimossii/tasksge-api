@@ -12,66 +12,56 @@
         }
     ],
     "paths": {
-        "/tasks/list": {
+        "/v1/tasks/": {
             "get": {
                 "tags": [
                     "Tarefas"
                 ],
-                "summary": "Listar todas as tarefas do usuário autenticado",
-                "operationId": "25d2bd498c44b1907faa475883a70cc2",
+                "summary": "Lista todas as tarefas do usuário autenticado",
+                "operationId": "207c8619efa3949341e959293b51afd4",
                 "responses": {
                     "200": {
-                        "description": "Lista de tarefas"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/tasks/filter/{status}": {
-            "get": {
-                "tags": [
-                    "Tarefas"
-                ],
-                "summary": "Filtrar tarefas por status",
-                "operationId": "46700c8c1a242d4297dc65cc581b029f",
-                "parameters": [
-                    {
-                        "name": "status",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "pendente",
-                                "em andamento",
-                                "concluída"
-                            ]
+                        "description": "Lista de tarefas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Task"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhuma tarefa encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Nenhuma tarefa encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
                         }
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Lista de tarefas filtradas"
-                    }
                 },
                 "security": [
                     {
                         "sanctum": []
                     }
                 ]
-            }
-        },
-        "/tasks/store": {
+            },
             "post": {
                 "tags": [
                     "Tarefas"
                 ],
                 "summary": "Criar uma nova tarefa",
-                "operationId": "698f9e7491313bec4af5c0c577ed245f",
+                "operationId": "6d32f1fc6caf9e3f81c6f9adf59f5e6d",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -110,13 +100,47 @@
                 ]
             }
         },
-        "/tasks/status/{id}": {
+        "/v1/tasks/filter/{status}": {
+            "get": {
+                "tags": [
+                    "Tarefas"
+                ],
+                "summary": "Filtrar tarefas por status",
+                "operationId": "3d5367d9f361e3cfde9ed5c89c7add1f",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pendente",
+                                "em andamento",
+                                "concluída"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de tarefas filtradas"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/v1/tasks/status/{id}": {
             "put": {
                 "tags": [
                     "Tarefas"
                 ],
                 "summary": "Atualizar o status de uma tarefa",
-                "operationId": "d8b2d67b62c2004fc69c06f0b4b8762c",
+                "operationId": "5bf3f60cc8d8b1d1ca59eff4dd2a166d",
                 "parameters": [
                     {
                         "name": "id",
@@ -166,13 +190,13 @@
                 ]
             }
         },
-        "/tasks/delete/{id}": {
+        "/v1/tasks/{id}": {
             "delete": {
                 "tags": [
                     "Tarefas"
                 ],
                 "summary": "Deletar uma tarefa",
-                "operationId": "bedbe5a3823a3ae0363cdf9242f4a418",
+                "operationId": "c0b4c3d2d867a20929b86a9fcd4c49b5",
                 "parameters": [
                     {
                         "name": "id",
@@ -196,6 +220,61 @@
                         "sanctum": []
                     }
                 ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Task": {
+                "title": "Task",
+                "required": [
+                    "id",
+                    "title",
+                    "user_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Estudar Swagger"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Aprender a documentar APIs"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pendente"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-06-10T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-06-10T13:00:00Z"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Autenticação via token Sanctum",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
