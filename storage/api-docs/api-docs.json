@@ -15,7 +15,7 @@
         "/auth/register": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Auntenticação"
                 ],
                 "summary": "Registrar novo usuário",
                 "operationId": "c47a1b563e5e8bc3c7b962f893981e84",
@@ -68,7 +68,7 @@
         "/auth/login": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Auntenticação"
                 ],
                 "summary": "Iniciar sessão",
                 "operationId": "1ff9c65c5cd1a8e0786e318eed856972",
@@ -405,8 +405,8 @@
     },
     "tags": [
         {
-            "name": "Authentication",
-            "description": "Authentication"
+            "name": "Auntenticação",
+            "description": "Auntenticação"
         },
         {
             "name": "Tarefas",

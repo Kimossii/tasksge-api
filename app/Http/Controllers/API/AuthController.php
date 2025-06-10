@@ -15,7 +15,7 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/auth/register",
-     *     tags={"Authentication"},
+     *     tags={"Auntenticação"},
      *     summary="Registrar novo usuário",
      *     @OA\RequestBody(
      *         required=true,
@@ -65,7 +65,7 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/auth/login",
-     *     tags={"Authentication"},
+     *     tags={"Auntenticação"},
      *     summary="Iniciar sessão",
      *     @OA\RequestBody(
      *         required=true,
