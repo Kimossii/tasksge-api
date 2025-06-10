@@ -88,9 +88,9 @@ class TaskController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"titulo"},
+     *             required={"title"},
      *             @OA\Property(property="titulo", type="string", example="Estudar Swagger"),
-     *             @OA\Property(property="descricao", type="string", example="Aprender a documentar APIs")
+     *             @OA\Property(property="description", type="string", example="Aprender a documentar APIs")
      *         )
      *     ),
      *     @OA\Response(

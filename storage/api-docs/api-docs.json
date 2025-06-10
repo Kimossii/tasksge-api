@@ -12,6 +12,103 @@
         }
     ],
     "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Registrar novo usuário",
+                "operationId": "c47a1b563e5e8bc3c7b962f893981e84",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Eluki Júnior"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "eluckimossi@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário registrado com sucesso"
+                    },
+                    "401": {
+                        "description": "Usuário já registrado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Iniciar sessão",
+                "operationId": "1ff9c65c5cd1a8e0786e318eed856972",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "eluckimossi@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso"
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
         "/v1/tasks/": {
             "get": {
                 "tags": [
@@ -68,14 +165,14 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "titulo"
+                                    "title"
                                 ],
                                 "properties": {
                                     "titulo": {
                                         "type": "string",
                                         "example": "Estudar Swagger"
                                     },
-                                    "descricao": {
+                                    "description": {
                                         "type": "string",
                                         "example": "Aprender a documentar APIs"
                                     }
@@ -265,6 +362,34 @@
                     }
                 },
                 "type": "object"
+            },
+            "Authentication": {
+                "title": "Authentication",
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Eluki Júnior"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "eluckimossi@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "example": "12345678"
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -279,6 +404,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
         {
             "name": "Tarefas",
             "description": "Tarefas"
