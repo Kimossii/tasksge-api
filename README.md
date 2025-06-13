@@ -130,8 +130,101 @@ php artisan test
 #### Você pode visualizar a documentação completa da API em formato Swagger.
 * http://127.0.0.1:8000/api/documentation/
 
+ 
+
+
+#  Documentação Consumo API The CAT
+## ✅ Testar as Rotas
+
+##### Você pode testar as rotas no navegador ou usando o Postman:
+###### Lista 5 imagens aleatórias de gatos
+* " GET "  /cats	
+###### Lista todas as raças disponíveis
+* " GET "	/cats/breeds
+###### 	Lista imagens de uma raça específica
+* " GET "	/cats/race/{id}
+###### Lista todas as categorias
+* " GET "	/cats/categories
+###### Lista imagens de uma categoria específica
+* " GET "	/cats/category/{id}
+###### Adiciona uma imagem aos favoritos
+* " POST"	/cats/favorite
+###### Lista as imagens favoritas
+* " GET "/cats/favorites
+## 🔐 Como configurar a chave/token da API
+1. Registre-se em https://thecatapi.com/
+
+2. Copie sua chave de API.
+
+3. No arquivo .env, adicione
+```bash
+CAT_API_KEY=your_api_key_here
+CAT_API_BASE=https://api.thecatapi.com/v1/
+
+```
+4. No arquivo config/services.php, adicione:
+```bash
+'catapi' => [
+    'key' => env('CAT_API_KEY'),
+    'base_uri' => env('CAT_API_BASE'),
+],
+
+```
+## 🌐 Endpoints Criados
+Todos os endpoints estão agrupados sob o prefixo /cats.
+Exemplos:
+
+    Listar imagens: GET /cats
+
+    Listar raças: GET /cats/breeds
+
+    Imagens por raça: GET /cats/race/{id}
+
+    Favoritar imagem: POST /cats/favorite
+
+    Listar favoritos: GET /cats/favorites
+### 📥 Exemplo de Requisição (POST /cats/favorite)
+
+Request:
+```bash
+POST /cats/favorite
+Content-Type: application/x-www-form-urlencoded
+
+image_id=abc123
+
+```
+Response esperada:
+```bash
+{
+  "message": "Imagem favoritada com sucesso!"
+}
+```
+### 📤 Exemplo de Resposta (GET /cats)
+```bash
+[
+  {
+    "id": "abc123",
+    "url": "https://cdn2.thecatapi.com/images/abc123.jpg",
+    "width": 1200,
+    "height": 800
+  },
+  ...
+]
+```
+##  ✅ Critérios de Avaliação Atendidos
+
+* Uso correto do HTTP Client do Laravel (Http::withHeaders)
+
+* Armazenamento seguro da chave via .env
+
+* Tratamento de erros com fallback JSON
+
+* Código organizado por controller e views separadas
+
+* Documentação clara com exemplos e testes
+
 ## 📞 Contatos
 
 - **Email:** eluckimossi@gmail.com  
 - **LinkedIn:** [Eluki Júnior](https://www.linkedin.com/in/eluki-baptista/)  
-- **GitHub:** [Eluki Júnior](https://github.com/Kimossii)  
+- **GitHub:** [Eluki Júnior](https://github.com/Kimossii) 
