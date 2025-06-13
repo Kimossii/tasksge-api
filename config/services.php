@@ -34,5 +34,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'catapi' => [
+        'base_uri' => 'https://api.thecatapi.com/v1/',
+        'key' => env('CAT_API_KEY'),
+    ],
+
 
 ];
